@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -17,6 +19,8 @@ import io.ktor.http.*
 import io.ktor.auth.*
 import io.ktor.jackson.*
 import java.util.*
+import javax.inject.Singleton
+import javax.sql.DataSource
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -48,6 +52,7 @@ fun Application.module(testing: Boolean = false) {
     dependencyGraph.routes().apply { setupRoutes() }
 }
 
+@Singleton
 @Component(modules = [ConfigurableSingletons::class])
 interface ApplicationGraph {
     fun objectMapper(): ObjectMapper
@@ -56,6 +61,7 @@ interface ApplicationGraph {
 
 @Module
 class ConfigurableSingletons {
+    @Singleton
     @Provides
     fun provideObjectMapper(): ObjectMapper {
         val mapper = jacksonObjectMapper()
@@ -67,5 +73,19 @@ class ConfigurableSingletons {
             enable(SerializationFeature.INDENT_OUTPUT)
             registerModule(JavaTimeModule())
         }
+    }
+
+    @Singleton
+    @Provides
+    fun providePostgresDataSource(): DataSource {
+        val config = HikariConfig()
+        config.jdbcUrl = "jdbc:postgresql://localhost:5432/template"
+        config.username = "ryanIsFunny"
+        config.password = "ryanIsFunnyLooking"
+        config.addDataSourceProperty("cachePrepStmts", "true")
+        config.addDataSourceProperty("prepStmtCacheSize", "250")
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
+
+        return HikariDataSource(config)
     }
 }

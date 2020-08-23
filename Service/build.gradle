@@ -40,10 +40,26 @@ dependencies {
     implementation "io.ktor:ktor-auth-jwt:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.+"
-    implementation 'com.github.huntj88:kotlin-coroutines-jdbc:7264279aad'
+    implementation 'com.github.huntj88:kotlin-coroutines-jdbc:47422ea'
+    implementation "org.postgresql:postgresql:42.2.16"
+    implementation "com.zaxxer:HikariCP:3.4.5"
 
     api 'com.google.dagger:dagger:2.28.3'
     kapt 'com.google.dagger:dagger-compiler:2.28.3'
 
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
 }

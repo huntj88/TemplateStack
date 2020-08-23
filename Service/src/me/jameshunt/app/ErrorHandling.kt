@@ -13,7 +13,7 @@ fun Application.installErrorHandling() {
                 is ApiException -> {
                     val response = ErrorResponse(
                         statusCode = cause.statusCode.value,
-                        traceId = call.callId?.let { UUID.fromString(it) },
+                        traceId = call.callId?.toUUID(),
                         message = cause.userMessage
                     )
                     call.respond(cause.statusCode, response)
@@ -21,7 +21,7 @@ fun Application.installErrorHandling() {
                 else -> {
                     val response = ErrorResponse(
                         statusCode = HttpStatusCode.InternalServerError.value,
-                        traceId = call.callId?.let { UUID.fromString(it) },
+                        traceId = call.callId?.toUUID(),
                         message = HttpStatusCode.InternalServerError.description
                     )
                     call.respond(HttpStatusCode.InternalServerError, response)

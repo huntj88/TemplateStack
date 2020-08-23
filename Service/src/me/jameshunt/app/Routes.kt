@@ -15,11 +15,16 @@ class Routes @Inject constructor(private val userRoutes: UserRoutes) {
     }
 }
 
-class UserRoutes @Inject constructor() {
+class UserRoutes @Inject constructor(private val userRepository: UserRepository) {
     fun Routing.setup() {
         get("/") {
             throw ApiException(HttpStatusCode.Unauthorized, "haha")
             call.respond("HELLO WORLD!")
+        }
+
+        get("/users") {
+            val users = userRepository.getUsers()
+            call.respond(users)
         }
     }
 }
