@@ -1,4 +1,4 @@
-package me.jameshunt
+package me.jameshunt.app
 
 import com.fasterxml.jackson.core.util.DefaultIndenter
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
@@ -16,7 +16,6 @@ import org.slf4j.event.*
 import io.ktor.http.*
 import io.ktor.auth.*
 import io.ktor.jackson.*
-import io.ktor.response.*
 import java.util.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -26,16 +25,14 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
     val dependencyGraph = DaggerApplicationGraph.create()
 
-    install(StatusPages) {
-        exception<Throwable> { cause ->
-            call.respond(HttpStatusCode.InternalServerError, "Internal Server Error")
-            cause.printStackTrace() // TODO: only printStackTrace locally
-            throw cause
-        }
+    installErrorHandling()
+
+    install(CallId) {
+        generate { UUID.randomUUID().toString() }
     }
 
     install(CallLogging) {
-        mdc("traceId") { UUID.randomUUID().toString() }
+        callIdMdc("traceId")
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
     }

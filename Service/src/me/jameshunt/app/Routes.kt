@@ -1,4 +1,4 @@
-package me.jameshunt
+package me.jameshunt.app
 
 import io.ktor.application.*
 import io.ktor.http.*
@@ -18,7 +18,8 @@ class Routes @Inject constructor(private val userRoutes: UserRoutes) {
 class UserRoutes @Inject constructor() {
     fun Routing.setup() {
         get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
+            throw ApiException(HttpStatusCode.Unauthorized, "haha")
+            call.respond("HELLO WORLD!")
         }
     }
 }
