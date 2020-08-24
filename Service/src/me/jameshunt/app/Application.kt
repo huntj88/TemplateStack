@@ -42,6 +42,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Authentication) {
+        // todo
     }
 
     install(ContentNegotiation) {
