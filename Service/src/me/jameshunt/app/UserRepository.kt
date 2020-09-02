@@ -1,10 +1,10 @@
 package me.jameshunt.app
 
 import com.github.michaelbull.jdbc.context.connection
-import com.github.michaelbull.jdbc.executeParameterizedQuery
-import com.github.michaelbull.jdbc.map
-import com.github.michaelbull.jdbc.postgresDialect
-import com.github.michaelbull.jdbc.withRepositoryContext
+import me.jameshunt.jdbc.extension.executeParameterizedQuery
+import me.jameshunt.jdbc.extension.map
+import me.jameshunt.jdbc.extension.postgresDialect
+import me.jameshunt.jdbc.extension.withRepositoryContext
 import java.util.*
 import javax.inject.Inject
 import javax.sql.DataSource

@@ -17,6 +17,7 @@ import io.ktor.features.*
 import org.slf4j.event.*
 import io.ktor.http.*
 import io.ktor.auth.*
+import io.ktor.auth.jwt.*
 import io.ktor.jackson.*
 import java.util.*
 import javax.inject.Singleton
@@ -28,10 +29,12 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     val dependencyGraph = DaggerApplicationGraph.create()
+    val jwtAuth = JWTAuth("myJwtPassword")
 
     installErrorHandling()
 
     install(CallId) {
+        retrieveFromHeader("traceId")
         generate { UUID.randomUUID().toString() }
     }
 
@@ -42,6 +45,12 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Authentication) {
+        jwt {
+            verifier(jwtAuth.verifier)
+            validate {
+                JWTPrincipal(it.payload)
+            }
+        }
         // todo
     }
 
