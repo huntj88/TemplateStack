@@ -13,6 +13,7 @@ java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -23,7 +24,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+
+    implementation("com.github.huntj88:kotlin-coroutines-jdbc-extensions:b981ad7f")
+    implementation("org.postgresql:postgresql:42.2.16")
+    implementation("com.zaxxer:HikariCP:3.4.5")
 
     implementation("net.logstash.logback:logstash-logback-encoder:6.4")
     implementation("com.github.skjolber.logback-logstash-syntax-highlighting-decorators:logback-logstash-syntax-highlighting-decorators:1.0.3")

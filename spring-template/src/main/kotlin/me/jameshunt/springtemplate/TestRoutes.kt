@@ -6,18 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
-import kotlin.coroutines.coroutineContext
 
 @RestController
-class TestRoutes {
+class TestRoutes(private val userRepository: UserRepository) {
 
     data class BlahInput(val name: String)
 
     @GetMapping("/blah", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    suspend fun blah(@RequestBody input: BlahInput): BlahInput {
+    suspend fun blah(@RequestBody input: BlahInput): List<User> {
         logger.info("hello")
-        val blah = coroutineContext.traceId()
-        return input.copy(name = blah)
+        return userRepository.getUsers()
     }
 
     @GetMapping("/error", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])

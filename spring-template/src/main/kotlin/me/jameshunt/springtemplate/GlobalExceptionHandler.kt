@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.core.annotation.Order
+import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -16,14 +17,14 @@ import reactor.util.context.Context
 
 @Component
 @Order(-1)
-class GlobalExceptionHandler(private val appErrorWriter: AppErrorWriter) : ErrorWebExceptionHandler {
+class GlobalExceptionHandler(private val appErrorWriter: AppErrorWriter, private val env: Environment) : ErrorWebExceptionHandler {
     override fun handle(exchange: ServerWebExchange, ex: Throwable): Mono<Void> {
         if (exchange.response.isCommitted) {
             return Mono.error(ex)
         }
 
         val traceId: String = exchange.attributes["context"]?.let { it as Context }?.get(TraceId) ?: "Missing TraceId"
-        val appError = when(ex) {
+        val appError = when (ex) {
             is ResponseStatusException -> AppError(
                 status = ex.status,
                 exception = ex,
@@ -36,6 +37,9 @@ class GlobalExceptionHandler(private val appErrorWriter: AppErrorWriter) : Error
                 message = HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
                 traceId = traceId
             )
+        }
+        if ("local" in env.activeProfiles) {
+            ex.printStackTrace()
         }
         return appErrorWriter.write(exchange, appError)
     }
