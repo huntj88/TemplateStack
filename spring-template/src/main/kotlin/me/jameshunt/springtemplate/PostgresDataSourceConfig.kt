@@ -8,16 +8,17 @@ import org.springframework.boot.actuate.health.AbstractHealthIndicator
 import org.springframework.boot.actuate.health.Health
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
 import javax.sql.DataSource
 
 @Configuration
 class PostgresDataSourceConfig {
     @Bean
-    fun postgresDataSource(): DataSource {
+    fun postgresDataSource(env: Environment): DataSource {
         val config = HikariConfig().apply {
-            jdbcUrl = "jdbc:postgresql://localhost:5432/template"
-            username = "ryanIsFunny"
-            password = "ryanIsFunnyLooking"
+            jdbcUrl = env.getRequiredProperty("jdbcTemplateUrl")
+            username = env.getRequiredProperty("jdbcTemplateUsername")
+            password = env.getRequiredProperty("jdbcTemplatePassword")
             addDataSourceProperty("cachePrepStmts", "true")
             addDataSourceProperty("prepStmtCacheSize", "250")
             addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
