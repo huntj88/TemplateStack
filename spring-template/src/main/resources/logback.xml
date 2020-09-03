@@ -1,21 +1,59 @@
 <configuration>
-    <appender name="jsonSTDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <timeZone>UTC</timeZone>
-            <timestampPattern>YYYY-MM-dd HH:mm:ss.SSS</timestampPattern>
-            <fieldNames>
-                <timestamp>timestamp</timestamp>
-                <logger>location</logger>
-                <version>[ignore]</version>
-                <levelValue>[ignore]</levelValue>
-                <stackTrace>exception</stackTrace>
-            </fieldNames>
-        </encoder>
-    </appender>
 
-    <root level="trace">
-        <appender-ref ref="jsonSTDOUT"/>
-    </root>
+    <!-- local has json with syntax highlighting and only shows info level and up -->
+    <springProfile name="local">
+        <appender name="jsonSTDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <!-- add pretty-printing and syntax highlighting for testing -->
+                <jsonGeneratorDecorator class="com.github.skjolber.decorators.SyntaxHighlightingDecorator">
+                    <syntaxHighlighterFactory
+                            class="com.github.skjolber.decorators.factory.LogLevelSyntaxHighlighterFactory">
+                        <level>
+                            <info>green</info>
+                            <warning>yellow</warning>
+                            <error>red</error>
+                        </level>
+                        <message>highIntensity blue</message>
+                    </syntaxHighlighterFactory>
+                </jsonGeneratorDecorator>
+                <timeZone>UTC</timeZone>
+                <timestampPattern>YYYY-MM-dd HH:mm:ss.SSS</timestampPattern>
+                <fieldNames>
+                    <timestamp>timestamp</timestamp>
+                    <logger>location</logger>
+                    <version>[ignore]</version>
+                    <levelValue>[ignore]</levelValue>
+                    <stackTrace>exception</stackTrace>
+                </fieldNames>
+            </encoder>
+        </appender>
+
+        <root level="info">
+            <appender-ref ref="jsonSTDOUT"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="staging,prod">
+        <appender name="jsonSTDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <!-- add pretty-printing and syntax highlighting for testing -->
+                <timeZone>UTC</timeZone>
+                <timestampPattern>YYYY-MM-dd HH:mm:ss.SSS</timestampPattern>
+                <fieldNames>
+                    <timestamp>timestamp</timestamp>
+                    <logger>location</logger>
+                    <version>[ignore]</version>
+                    <levelValue>[ignore]</levelValue>
+                    <stackTrace>exception</stackTrace>
+                </fieldNames>
+            </encoder>
+        </appender>
+
+        <root level="trace">
+            <appender-ref ref="jsonSTDOUT"/>
+        </root>
+    </springProfile>
+
     <logger name="org.eclipse.jetty" level="INFO"/>
     <logger name="io.netty" level="INFO"/>
 </configuration>

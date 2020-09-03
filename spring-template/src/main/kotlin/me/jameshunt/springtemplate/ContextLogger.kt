@@ -25,6 +25,18 @@ class ContextLogger(private val logger: Logger) {
         }
     }
 
+    suspend fun warn(msg: String) {
+        MDC.putCloseable(TraceId, coroutineContext.traceId()).use {
+            logger.warn(msg)
+        }
+    }
+
+    suspend fun warn(msg: String, throwable: Throwable) {
+        MDC.putCloseable(TraceId, coroutineContext.traceId()).use {
+            logger.warn(msg, throwable)
+        }
+    }
+
     suspend fun error(msg: String) {
         MDC.putCloseable(TraceId, coroutineContext.traceId()).use {
             logger.error(msg)
