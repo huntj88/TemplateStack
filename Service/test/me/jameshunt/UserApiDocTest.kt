@@ -2,22 +2,10 @@ package me.jameshunt
 
 import io.ktor.http.*
 import io.restassured.RestAssured.given
-import io.restassured.specification.RequestSpecification
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.restdocs.RestDocumentationContextProvider
-import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document
 
-@ExtendWith(RestDocumentationExtension::class, AsciiDocExtension::class)
-class UserApiDocTest {
-
-    lateinit var spec: RequestSpecification
-    @BeforeEach
-    fun setup(restDocumentation: RestDocumentationContextProvider) {
-        this.spec = restDocumentation.defaultSpecBuilder().build()
-    }
+class UserApiDocTest: AsciiDocBaseTest() {
 
     @Test
     fun `generate user docs`() {

@@ -58,6 +58,13 @@ dependencies {
     testImplementation "org.springframework.restdocs:spring-restdocs-restassured:2.0.4.RELEASE"
     testImplementation "io.rest-assured:rest-assured:4.1.2"
     testImplementation "org.codehaus.groovy:groovy-all:2.4.15"
+
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+    testRuntime 'org.junit.vintage:junit-vintage-engine:5.4.2'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 asciidoctor {

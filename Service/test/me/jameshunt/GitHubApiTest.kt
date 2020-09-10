@@ -1,25 +1,19 @@
 package me.jameshunt
 
 import io.restassured.RestAssured.given
-import io.restassured.specification.RequestSpecification
-import org.junit.jupiter.api.BeforeEach
+import io.restassured.builder.RequestSpecBuilder
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
-import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document
 
-@ExtendWith(RestDocumentationExtension::class, AsciiDocExtension::class)
-class GitHubApiTest {
+class GitHubApiTest : AsciiDocBaseTest() {
 
-    lateinit var spec: RequestSpecification
-    @BeforeEach
-    fun setup(restDocumentation: RestDocumentationContextProvider) {
-        this.spec = restDocumentation.defaultSpecBuilder().setBaseUri("https://api.github.com").build()
+    override fun createSpecBuilder(restDocumentation: RestDocumentationContextProvider): RequestSpecBuilder {
+        return super.createSpecBuilder(restDocumentation).setBaseUri("https://api.github.com")
     }
 
     /**
