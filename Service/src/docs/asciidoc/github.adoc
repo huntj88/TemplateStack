@@ -1,0 +1,21 @@
+[[resources-github]]
+== GitHub
+
+This section demonstrates that even external REST APIs can be documented
+with Spring REST Docs and REST Assured.
+
+[[resources-github-user]]
+=== Get a user
+
+`GET https://api.github.com/users/huntj88`
+
+==== Response fields
+
+Only a selected number of fields is documented intentionally.
+
+include::{snippets}/github/get-user/response-fields.adoc[]
+
+==== Example request/response
+
+include::{snippets}/github/get-user/curl-request.adoc[]
+include::{snippets}/github/get-user/http-response.adoc[]
