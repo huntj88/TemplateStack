@@ -53,11 +53,15 @@ dependencies {
     api 'com.google.dagger:dagger:2.28.3'
     kapt 'com.google.dagger:dagger-compiler:2.28.3'
 
+    testImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
-    testImplementation "org.springframework.restdocs:spring-restdocs-restassured:2.0.0.RELEASE"
+    testImplementation "org.springframework.restdocs:spring-restdocs-restassured:2.0.4.RELEASE"
+    testImplementation "io.rest-assured:rest-assured:4.1.2"
+    testImplementation "org.codehaus.groovy:groovy-all:2.4.15"
 }
 
 asciidoctor {
+    baseDirFollowsSourceDir()
     attributes snippets : file('build/generated-snippets').absolutePath
     dependsOn test
 }

@@ -1,0 +1,19 @@
+[[resources-user]]
+== User api
+
+This section demonstrates that even external REST APIs can be documented
+with Spring REST Docs and REST Assured.
+
+[[resources-user-all]]
+=== Get all users
+
+`GET https://host/users`
+
+==== Response fields
+
+include::{snippets}/users/http-response.adoc[]
+
+==== Example request/response
+
+include::{snippets}/users/curl-request.adoc[]
+include::{snippets}/users/http-response.adoc[]

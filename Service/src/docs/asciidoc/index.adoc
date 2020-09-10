@@ -1,0 +1,11 @@
+= REST Docs with Ktor
+James Hunt;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+
+Sample application demonstrating how to use Spring REST Docs with Ktor.
+This is possible with REST Assured and it can even be used to document external REST APIs.
+
+include::user.adoc[]
+include::github.adoc[]

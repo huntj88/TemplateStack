@@ -1,24 +1,26 @@
 package me.jameshunt
 
 import io.restassured.RestAssured.given
-import io.restassured.builder.RequestSpecBuilder
 import io.restassured.specification.RequestSpecification
-import org.junit.Rule
-import org.junit.Test
-import org.springframework.restdocs.JUnitRestDocumentation
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.restdocs.RestDocumentationContextProvider
+import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document
-import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration
 
+@ExtendWith(RestDocumentationExtension::class, AsciiDocExtension::class)
 class GitHubApiTest {
-    @get:Rule
-    val restDocumentation: JUnitRestDocumentation = JUnitRestDocumentation()
-    private val documentationSpec: RequestSpecification = RequestSpecBuilder()
-        .setBaseUri("https://api.github.com")
-        .addFilter(documentationConfiguration(restDocumentation)).build()
+
+    lateinit var spec: RequestSpecification
+    @BeforeEach
+    fun setup(restDocumentation: RestDocumentationContextProvider) {
+        this.spec = restDocumentation.defaultSpecBuilder().setBaseUri("https://api.github.com").build()
+    }
 
     /**
      * This test accesses api.github.com and thus only works with an Internet connection and if api.github.com.
@@ -26,8 +28,8 @@ class GitHubApiTest {
      * Spring REST Docs.
      */
     @Test
-    fun shouldReturnAllRepos() {
-        given(documentationSpec)
+    fun githubUserTest() {
+        given(spec)
             .filter(
                 document(
                     "github/get-user",
